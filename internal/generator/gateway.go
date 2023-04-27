@@ -157,7 +157,7 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 		return
 	}
 
-	g.P(`gwReq := c.gwc.NewRequest("`, rule.Method, `", "`, rule.Pattern, `")`)
+	g.P(`gwReq := c.gwc.NewRequest(ctx, "`, rule.Method, `", "`, rule.Pattern, `")`)
 	fieldsByName := make(map[string]*protogen.Field)
 
 	pathFields := make(map[string]bool)

@@ -1,6 +1,7 @@
 package gateway
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/go-resty/resty/v2"
@@ -8,7 +9,7 @@ import (
 )
 
 type Client interface {
-	NewRequest(method, url string) *resty.Request
+	NewRequest(ctx context.Context, method, url string) *resty.Request
 
 	Marshal(v interface{}) ([]byte, error)
 	Unmarshal(data []byte, v interface{}) error
@@ -45,7 +46,7 @@ func NewClient(baseURL string, opts ...ClientOption) Client {
 	return c
 }
 
-func (c *client) NewRequest(method string, url string) *resty.Request {
+func (c *client) NewRequest(ctx context.Context, method string, url string) *resty.Request {
 	req := c.rc.NewRequest()
 	req.Method = method
 	req.URL = url

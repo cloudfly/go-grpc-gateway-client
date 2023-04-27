@@ -56,7 +56,7 @@ func (s *RequestTestSuite) SetupTest() {
 }
 
 func (s *RequestTestSuite) TestDoRequest() {
-	req := s.client.NewRequest(http.MethodPost, "/invitation").
+	req := s.client.NewRequest(context.Background(), http.MethodPost, "/invitation").
 		SetBody(&testv1.SendInvitationRequest{
 			Email: "test@test.com",
 		})
@@ -69,7 +69,7 @@ func (s *RequestTestSuite) TestDoStreamingRequest() {
 	ctx, cancel := context.WithTimeout(context.TODO(), 300*time.Millisecond)
 	defer cancel()
 
-	req := s.client.NewRequest(http.MethodGet, "/invitation/some-id")
+	req := s.client.NewRequest(context.Background(), http.MethodGet, "/invitation/some-id")
 	resCh, _, err := gateway.DoStreamingRequest[testv1.TrackInvitationResponse](ctx, s.client, req)
 	s.Require().NoError(err)
 	for {
