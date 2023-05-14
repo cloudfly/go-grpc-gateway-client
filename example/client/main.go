@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cloudfly/grpc-gateway-client/pkg/grpc/gateway"
+	"github.com/cloudfly/go-grpc-gateway-client/pkg/grpc/gateway"
 
-	grpc_gateway_client_example "github.com/cloudfly/grpc-gateway-client-example/pkg/api/gen"
+	grpc_gateway_client_example "github.com/cloudfly/go-grpc-gateway-client-example/pkg/api/gen"
 )
 
 func main() {

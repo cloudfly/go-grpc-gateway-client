@@ -1,4 +1,4 @@
-module github.com/cloudfly/grpc-gateway-client
+module github.com/cloudfly/go-grpc-gateway-client
 
 go 1.20
 

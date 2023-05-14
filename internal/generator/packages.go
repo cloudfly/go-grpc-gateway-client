@@ -14,7 +14,7 @@ var (
 
 // Akuity packages
 var (
-	pkgGatewayClient = protogen.GoImportPath("github.com/cloudfly/grpc-gateway-client/pkg/gateway")
+	pkgGatewayClient = protogen.GoImportPath("github.com/cloudfly/go-grpc-gateway-client/pkg/gateway")
 )
 
 // protobuf packages

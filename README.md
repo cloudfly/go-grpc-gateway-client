@@ -14,7 +14,7 @@ The `grpc-gateway-client` is a high quality REST client generator for [gRPC](htt
 1. Install `grpc-gateway-client`:
 
     ```bash
-    $ go install github.com/cloudfly/grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
+    $ go install github.com/cloudfly/go-grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
     ```
 2. Generate client code
 ```
