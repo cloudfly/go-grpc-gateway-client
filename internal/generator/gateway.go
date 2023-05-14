@@ -157,7 +157,10 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 		return
 	}
 
-	g.P(`gwReq := c.gwc.NewRequest(ctx, "`, rule.Method, `", "`, rule.Pattern, `")`)
+	g.P(`gwReq, err := c.gwc.NewRequest(ctx, "`, rule.Method, `", "`, rule.Pattern, `")`)
+	g.P("if err != nil {")
+	g.P(`return nil, fmt.Errorf("new request error: %w", err)`)
+	g.P("}")
 	fieldsByName := make(map[string]*protogen.Field)
 
 	pathFields := make(map[string]bool)
@@ -168,9 +171,9 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 			pathFields[fieldName] = true
 			valueAccessor := newStructAccessor([]string{"req"}, field.GoName)
 			if field.Desc.Enum() != nil {
-				g.P(`gwReq.SetPathParam("`, fieldName, `", `, valueAccessor, ".String())")
+				g.P(`gwReq = c.gwc.SetPathParam(ctx, gwReq, "`, fieldName, `", `, valueAccessor, ".String())")
 			} else {
-				g.P(`gwReq.SetPathParam("`, fieldName, `", `, pkgFmt.Ident("Sprintf"), `("%v", `, valueAccessor, "))")
+				g.P(`gwReq = c.gwc.SetPathParam(ctx, gwReq, "`, fieldName, `", `, pkgFmt.Ident("Sprintf"), `("%v", `, valueAccessor, "))")
 			}
 		}
 	}
@@ -188,7 +191,7 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 			}
 		}
 		if isQueryDefined {
-			g.P("gwReq.SetQueryParamsFromValues(q)")
+			g.P("gwReq.URL.RawQuery = q.Encode()")
 		}
 	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
 		field := "req"
@@ -197,6 +200,10 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 				field = newStructAccessor([]string{field}, bodyField.GoName)
 			}
 		}
-		g.P("gwReq.SetBody(", field, ")")
+		g.P("body, err := c.gwc.Marshal(ctx, ", `"`, rule.Method, `"`, ", gwReq.URL.Path, ", field, ")")
+		g.P("if err != nil {")
+		g.P(`return nil, fmt.Errorf("marshal request error: %%w", err)`)
+		g.P("}")
+		g.P("gwReq.Body = ", pkgIo.Ident("NopCloser"), "(", pkgBytes.Ident("NewBuffer"), "(body)", ")")
 	}
 }

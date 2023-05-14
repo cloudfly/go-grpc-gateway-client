@@ -7,11 +7,14 @@ var (
 	pkgContext = protogen.GoImportPath("context")
 	pkgFmt     = protogen.GoImportPath("fmt")
 	pkgNetURL  = protogen.GoImportPath("net/url")
+	pkgBytes   = protogen.GoImportPath("bytes")
+	pkgIo      = protogen.GoImportPath("io")
+	pkgHttp    = protogen.GoImportPath("net/http")
 )
 
 // Akuity packages
 var (
-	pkgGatewayClient = protogen.GoImportPath("github.com/cloudfly/grpc-gateway-client/pkg/grpc/gateway")
+	pkgGatewayClient = protogen.GoImportPath("github.com/cloudfly/grpc-gateway-client/pkg/gateway")
 )
 
 // protobuf packages

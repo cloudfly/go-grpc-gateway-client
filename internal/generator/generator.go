@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
 )
@@ -61,8 +62,10 @@ func generateClientInterface(g *protogen.GeneratedFile, svc *protogen.Service) {
 func generateClientConstructor(g *protogen.GeneratedFile, svc *protogen.Service) {
 	interfaceName := getClientInterfaceName(svc)
 	structName := getClientStructName(svc)
-	g.P("func New", interfaceName, "(c ", pkgGatewayClient.Ident("Client"), ") ", interfaceName, " {")
+	g.P("func New", interfaceName, "(ctx ", pkgContext.Ident("Context"), ",baseUrl string, opts ...", pkgGatewayClient.Ident("ClientOption"), ") ", interfaceName, " {")
 	defer g.P("}")
+
+	g.P("c := ", pkgGatewayClient.Ident("NewClient(ctx, baseUrl, opts...)"))
 
 	g.P("return &", structName, " {")
 	defer g.P("}")
@@ -73,7 +76,7 @@ func generateClientConstructor(g *protogen.GeneratedFile, svc *protogen.Service)
 func generateClientStruct(g *protogen.GeneratedFile, svc *protogen.Service) {
 	structName := getClientStructName(svc)
 	g.P("type ", structName, " struct {")
-	g.P("gwc ", pkgGatewayClient.Ident("Client"))
+	g.P("gwc *", pkgGatewayClient.Ident("Client"))
 	g.P("}")
 	g.P()
 	for _, method := range svc.Methods {
@@ -111,5 +114,5 @@ func generateUnaryMethod(g *protogen.GeneratedFile, receiverName string, m *prot
 
 	generateParamValues(g, m)
 	g.P("return ",
-		pkgGatewayClient.Ident("DoRequest"), "[", getMessageIdentifier(m.Output), "](ctx, gwReq)")
+		pkgGatewayClient.Ident("DoHTTPRequest"), "[", getMessageIdentifier(m.Output), "](ctx, c.gwc, gwReq)")
 }

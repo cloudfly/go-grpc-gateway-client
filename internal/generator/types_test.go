@@ -2,8 +2,6 @@ package generator
 
 import (
 	"testing"
-
-	"github.com/stretchr/testify/require"
 )
 
 func Test_newStructAccessor(t *testing.T) {
@@ -40,7 +38,10 @@ func Test_newStructAccessor(t *testing.T) {
 	for name, ts := range testSets {
 		t.Run(name, func(t *testing.T) {
 			actual := newStructAccessor(ts.input.parentFields, ts.input.field)
-			require.Equal(t, ts.expected, actual)
+			if ts.expected != actual {
+				t.Fatalf("%s != %s, they should be equal", actual, ts.expected)
+				t.FailNow()
+			}
 		})
 	}
 }
@@ -62,7 +63,10 @@ func Test_unexport(t *testing.T) {
 	for name, ts := range testSets {
 		t.Run(name, func(t *testing.T) {
 			actual := unexport(ts.input)
-			require.Equal(t, ts.expected, actual)
+			if ts.expected != actual {
+				t.Fatalf("%s != %s, they should be equal", actual, ts.expected)
+				t.FailNow()
+			}
 		})
 	}
 }

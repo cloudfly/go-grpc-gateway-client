@@ -7,7 +7,6 @@ The `grpc-gateway-client` is a high quality REST client generator for [gRPC](htt
 - Strongly typed client interface.
 - Supports all gRPC features including streaming.
 - Supports all grpc-gateway features including custom query parameters, and request body.
-- Battle tested by [Akuity's](https://akuity.io/) production services.
 
 
 ## Usage
@@ -17,4 +16,16 @@ The `grpc-gateway-client` is a high quality REST client generator for [gRPC](htt
     ```bash
     $ go install github.com/cloudfly/grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
     ```
+2. Generate client code
+```
+outdir=service
+BASEDIR=./
+protoc -I $BASEDIR \
+	-I $BASEDIR \
+	--go_out=paths=source_relative:$outdir/service \
+	--go-grpc_out=paths=source_relative:$outdir/service \
+	--grpc-gateway_out=logtostderr=true,paths=source_relative:$outdir/service \
+	--grpc-gateway-client_out=paths=source_relative:$outdir/service \
+	${BASEDIR}/your_service.proto
+```
 See [example](./example/README.md) for a complete example.

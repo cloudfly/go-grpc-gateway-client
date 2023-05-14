@@ -5,12 +5,23 @@ import (
 	"net/http"
 
 	"google.golang.org/grpc/codes"
-
-	"github.com/cloudfly/grpc-gateway-client/pkg/http/roundtripper"
 )
 
+type WrappedRoundTripper interface {
+	http.RoundTripper
+	Unwrap() http.RoundTripper
+}
+
+func GetRoundTripper(c *http.Client) http.RoundTripper {
+	rt := c.Transport
+	if rt != nil {
+		return rt
+	}
+	return http.DefaultTransport.(*http.Transport).Clone()
+}
+
 func setSkipTLSVerify(hc *http.Client, skip bool) {
-	rt := roundtripper.GetRoundTripper(hc)
+	rt := GetRoundTripper(hc)
 	for {
 		ht, ok := rt.(*http.Transport)
 		if ok {
@@ -21,7 +32,7 @@ func setSkipTLSVerify(hc *http.Client, skip bool) {
 			break
 		}
 
-		wrapped, ok := rt.(roundtripper.WrappedRoundTripper)
+		wrapped, ok := rt.(WrappedRoundTripper)
 		if !ok {
 			break
 		}
