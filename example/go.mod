@@ -1,9 +1,9 @@
-module github.com/akuity/grpc-gateway-client-example
+module github.com/cloudfly/grpc-gateway-client-example
 
 go 1.20
 
 require (
-	github.com/akuity/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b
+	github.com/cloudfly/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488
 	google.golang.org/grpc v1.53.0

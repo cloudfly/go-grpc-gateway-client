@@ -1,5 +1,5 @@
-github.com/akuity/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b h1:G33OBPHEE9Mc99gQHx921AK5FpnfVnZKF5Sa10GFnlM=
-github.com/akuity/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b/go.mod h1:2LXcIC4bAFvsZitqz5qtaTfYS5vCbz4BTA/BgkJLM0g=
+github.com/cloudfly/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b h1:G33OBPHEE9Mc99gQHx921AK5FpnfVnZKF5Sa10GFnlM=
+github.com/cloudfly/grpc-gateway-client v0.0.0-20230317045720-1b9ff2b5a13b/go.mod h1:2LXcIC4bAFvsZitqz5qtaTfYS5vCbz4BTA/BgkJLM0g=
 github.com/alevinval/sse v1.0.1 h1:cFubh2lMNdHT6niFLCsyTuhAgljaAWbdmceAe6qPIfo=
 github.com/alevinval/sse v1.0.1/go.mod h1:Bvl1EawUlmW1y1vSU5uDl03+1Zsqqz/+6D2PAUvftcw=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

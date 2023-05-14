@@ -1,9 +1,0 @@
-version: v1
-name: buf.build/akuity/grpc-gateway-client
-deps:
-  - buf.build/googleapis/googleapis
-  - buf.build/grpc-ecosystem/grpc-gateway
-lint:
-  ignore:
-    - healthv1
-    - testv1

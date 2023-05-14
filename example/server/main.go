@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	gen "github.com/akuity/grpc-gateway-client-example/pkg/api/gen"
+	gen "github.com/cloudfly/grpc-gateway-client-example/pkg/api/gen"
 )
 
 type greeter struct {

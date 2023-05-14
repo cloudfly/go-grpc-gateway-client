@@ -15,31 +15,6 @@ The `grpc-gateway-client` is a high quality REST client generator for [gRPC](htt
 1. Install `grpc-gateway-client`:
 
     ```bash
-    $ go install github.com/akuity/grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
+    $ go install github.com/cloudfly/grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
     ```
-1. Add plugin in your buf.gen.yaml:
-
-    ```yaml
-    version: v1
-    managed:
-    enabled: true
-
-    plugins:
-      - name: gateway-client
-        path: protoc-gen-grpc-gateway-client
-        out: pkg/api/gen
-        opt:
-          - paths=source_relative
-    ```
-1. Generate client using `buf generate` and use it in your code:
-
-   ```go
-    client := grpc_gateway_client_example.NewGreeterGatewayClient(gateway.NewClient(baseURL))
-    resp, err := client.SayHello(context.Background(), &grpc_gateway_client_example.HelloRequest{Name: "World"})
-    if err != nil {
-        panic(err)
-    }
-    fmt.Println(resp.Message)
-    ```
-
 See [example](./example/README.md) for a complete example.

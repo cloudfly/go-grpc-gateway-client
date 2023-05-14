@@ -6,7 +6,7 @@ package grpc_gateway_client_example
 import (
 	context "context"
 	fmt "fmt"
-	gateway "github.com/akuity/grpc-gateway-client/pkg/grpc/gateway"
+	gateway "github.com/cloudfly/grpc-gateway-client/pkg/grpc/gateway"
 	url "net/url"
 )
 

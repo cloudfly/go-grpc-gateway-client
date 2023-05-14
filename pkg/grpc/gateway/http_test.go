@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/akuity/grpc-gateway-client/pkg/http/roundtripper"
+	"github.com/cloudfly/grpc-gateway-client/pkg/http/roundtripper"
 )
 
 var (
