@@ -1,6 +1,6 @@
-# grpc-gateway-client
+# go-grpc-gateway-client
 
-The `grpc-gateway-client` is a high quality REST client generator for [gRPC](https://grpc.io/) services that are fronted by [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway).
+The `go-grpc-gateway-client` is a high quality http client generator for [gRPC](https://grpc.io/) services that are fronted by [grpc-gateway](https://github.com/grpc-ecosystem/grpc-gateway).
 
 ## Features
 
@@ -8,10 +8,9 @@ The `grpc-gateway-client` is a high quality REST client generator for [gRPC](htt
 - Supports all gRPC features including streaming.
 - Supports all grpc-gateway features including custom query parameters, and request body.
 
-
 ## Usage
 
-1. Install `grpc-gateway-client`:
+1. Install `go-grpc-gateway-client`:
 
     ```bash
     $ go install github.com/cloudfly/go-grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
