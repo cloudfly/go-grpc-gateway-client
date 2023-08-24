@@ -10,11 +10,15 @@ import (
 	"strings"
 )
 
-type Marshaler func(ctx context.Context, method string, path string, data any) ([]byte, error)
+type Marshaler func(ctx context.Context, method string, path string, data any) ([]byte, string, error)
 type Unmarshaler func(ctx context.Context, contentType string, code int, body io.Reader, dst any) error
 
-func defaultMarshaler(ctx context.Context, method string, path string, data any) ([]byte, error) {
-	return json.Marshal(data)
+func defaultMarshaler(ctx context.Context, method string, path string, data any) ([]byte, string, error) {
+	content, err := json.Marshal(data)
+	if err != nil {
+		return nil, "", err
+	}
+	return content, "application/json", nil
 }
 func defaultUnmarshaler(ctx context.Context, contentType string, code int, body io.Reader, dst any) error {
 	return json.NewDecoder(body).Decode(dst)
@@ -54,7 +58,7 @@ func (c *Client) Context() context.Context {
 	return c.ctx
 }
 
-func (c *Client) Marshal(ctx context.Context, method string, path string, data any) ([]byte, error) {
+func (c *Client) Marshal(ctx context.Context, method string, path string, data any) ([]byte, string, error) {
 	return c.marshaler(ctx, method, path, data)
 }
 

@@ -13,7 +13,7 @@ The `go-grpc-gateway-client` is a high quality http client generator for [gRPC](
 1. Install `go-grpc-gateway-client`:
 
     ```bash
-    $ go install github.com/cloudfly/go-grpc-gateway-client/protoc-gen-grpc-gateway-client@latest
+    $ go install github.com/cloudfly/go-grpc-gateway-client/protoc-gen-go-grpc-gateway-client@latest
     ```
 2. Generate client code
 ```

@@ -2,11 +2,11 @@
 // source: helloworld.proto
 
 /*
-Package grpc_gateway_client_example is a reverse proxy.
+Package example is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package grpc_gateway_client_example
+package example
 
 import (
 	"context"
@@ -104,7 +104,7 @@ func RegisterGreeterHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 // RegisterGreeterHandlerFromEndpoint is same as RegisterGreeterHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterGreeterHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}

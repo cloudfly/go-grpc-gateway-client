@@ -113,7 +113,7 @@ func generateQueryParam(
 	// If current field is inside the repeated message, ignore intermediate fields
 	// since the loopValueAccessor directs the current field itself.
 	if len(structFields) > 1 && structFields[0] == loopValueAccessor {
-		queryValueAccessor = newStructAccessor(structFields[:1], field.GoName)
+		queryValueAccessor = newStructAccessor(structFields[:len(structFields)-1], field.GoName)
 	}
 
 	if isMap {
@@ -164,9 +164,10 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 	fieldsByName := make(map[string]*protogen.Field)
 
 	pathFields := make(map[string]bool)
+	queryFields := make(map[string]bool)
 	for _, field := range m.Input.Fields {
-		fieldsByName[field.Desc.TextName()] = field
 		fieldName := field.Desc.TextName()
+		fieldsByName[fieldName] = field
 		if strings.Contains(rule.Pattern, fmt.Sprintf("{%s}", fieldName)) {
 			pathFields[fieldName] = true
 			valueAccessor := newStructAccessor([]string{"req"}, field.GoName)
@@ -175,24 +176,26 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 			} else {
 				g.P(`gwReq = c.gwc.SetPathParam(ctx, gwReq, "`, fieldName, `", `, pkgFmt.Ident("Sprintf"), `("%v", `, valueAccessor, "))")
 			}
+		} else if rule.Body != "*" && fieldName != rule.Body {
+			queryFields[fieldName] = true
 		}
 	}
 
-	switch rule.Method {
-	case http.MethodGet:
-		isQueryDefined := false
-		for _, field := range m.Input.Fields {
-			if _, ok := pathFields[field.Desc.TextName()]; !ok {
-				if !isQueryDefined {
-					g.P("q := ", pkgNetURL.Ident("Values"), "{}")
-					isQueryDefined = true
-				}
-				generateQueryParam(g, field, []string{"req"}, false)
+	isQueryDefined := false
+	for _, field := range m.Input.Fields {
+		if _, ok := queryFields[field.Desc.TextName()]; ok {
+			if !isQueryDefined {
+				g.P("q := ", pkgNetURL.Ident("Values"), "{}")
+				isQueryDefined = true
 			}
+			generateQueryParam(g, field, []string{"req"}, false)
 		}
-		if isQueryDefined {
-			g.P("gwReq.URL.RawQuery = q.Encode()")
-		}
+	}
+	if isQueryDefined {
+		g.P("gwReq.URL.RawQuery = q.Encode()")
+	}
+
+	switch rule.Method {
 	case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
 		field := "req"
 		if rule.Body != "*" {
@@ -200,10 +203,13 @@ func generateParamValues(g *protogen.GeneratedFile, m *protogen.Method) {
 				field = newStructAccessor([]string{field}, bodyField.GoName)
 			}
 		}
-		g.P("body, err := c.gwc.Marshal(ctx, ", `"`, rule.Method, `"`, ", gwReq.URL.Path, ", field, ")")
+		g.P("body, contentType, err := c.gwc.Marshal(ctx, ", `"`, rule.Method, `"`, ", gwReq.URL.Path, ", field, ")")
 		g.P("if err != nil {")
-		g.P(`return nil, fmt.Errorf("marshal request error: %%w", err)`)
+		g.P(`return nil, fmt.Errorf("marshal request error: %w", err)`)
 		g.P("}")
+		g.P(`if contentType != "" {`)
+		g.P(`gwReq.Header.Set("Content-Type", contentType)`)
+		g.P(`}`)
 		g.P("gwReq.Body = ", pkgIo.Ident("NopCloser"), "(", pkgBytes.Ident("NewBuffer"), "(body)", ")")
 	}
 }
