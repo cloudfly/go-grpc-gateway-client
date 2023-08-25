@@ -104,6 +104,7 @@ func generateQueryParam(
 	queryKeyFields ...string,
 ) {
 	isOptional := field.Desc.HasOptionalKeyword()
+	isMessage := field.Desc.Message() != nil
 	isMap := field.Desc.IsMap()
 	isRepeated := field.Desc.Cardinality() == protoreflect.Repeated
 
@@ -130,7 +131,7 @@ func generateQueryParam(
 			queryValueAccessor = loopValueAccessor
 			structFields = []string{loopValueAccessor}
 			defer g.P("}")
-		} else if isOptional {
+		} else if isOptional || isMessage {
 			g.P("if ", queryValueAccessor, " != nil {")
 			defer g.P("}")
 		}
