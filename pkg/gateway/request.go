@@ -57,7 +57,7 @@ func DoStreamingRequest[T any](ctx context.Context, c *Client, req *http.Request
 			return nil, nil, errors.New(string(data))
 		}
 		var errRes rpcstatus.Status
-		if err := c.unmarshaler(ctx, resp.Header.Get("Content-Type"), resp.StatusCode, bytes.NewBuffer([]byte(rawErrRes)), &errRes); err != nil {
+		if err := c.unmarshaler(ctx, resp.Header, resp.StatusCode, bytes.NewBuffer([]byte(rawErrRes)), &errRes); err != nil {
 			return nil, nil, fmt.Errorf("unmarshal error response: %w", err)
 		}
 		if err := status.ErrorProto(&errRes); err != nil {
@@ -98,7 +98,7 @@ func DoStreamingRequest[T any](ctx context.Context, c *Client, req *http.Request
 			}
 
 			var data T
-			if err := c.unmarshaler(ctx, resp.Header.Get("Content-Type"), resp.StatusCode, bytes.NewBuffer([]byte(rawResult)), &data); err != nil {
+			if err := c.unmarshaler(ctx, resp.Header, resp.StatusCode, bytes.NewBuffer([]byte(rawResult)), &data); err != nil {
 				errCh <- err
 				return
 			}
@@ -126,7 +126,7 @@ func DoHTTPRequest[T any](ctx context.Context, c *Client, req *http.Request) (*T
 
 	if resp.StatusCode > 399 {
 		var d rpcstatus.Status
-		if err := c.unmarshaler(ctx, resp.Header.Get("Content-Type"), resp.StatusCode, resp.Body, &d); err != nil {
+		if err := c.unmarshaler(ctx, resp.Header, resp.StatusCode, resp.Body, &d); err != nil {
 			return nil, fmt.Errorf("unmarshal fail response error: %w", err)
 		}
 		if err := status.ErrorProto(&d); err != nil {
@@ -142,7 +142,7 @@ func DoHTTPRequest[T any](ctx context.Context, c *Client, req *http.Request) (*T
 		return any(content).(*T), err
 	}
 
-	if err := c.unmarshaler(ctx, resp.Header.Get("Content-Type"), resp.StatusCode, resp.Body, &bodyDst); err != nil {
+	if err := c.unmarshaler(ctx, resp.Header, resp.StatusCode, resp.Body, &bodyDst); err != nil {
 		return nil, fmt.Errorf("unmarshal response error: %w", err)
 	}
 	return &bodyDst, nil
